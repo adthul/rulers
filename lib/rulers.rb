@@ -3,7 +3,7 @@ require "rulers/routing"
 require "rulers/util"
 require "rulers/dependencies"
 require "rulers/controller"
-require "file_model"
+require "rulers/file_model"
 
 module Rulers
   class Application
@@ -14,7 +14,6 @@ module Rulers
       if env['PATH_INFO'] == '/'
         return [301, {'Content-Type' => 'text/html', 'Location' => '/quotes/a_quote'}, []]
       end
-
       klass, act = get_controller_and_action(env)
       controller = klass.new(env)
       text = controller.send(act)
