@@ -3,6 +3,8 @@ require "multi_json"
 module Rulers
   module Model
     class FileModel
+      attr_reader :id
+
       def initialize(filename)
         @filename = filename
         basename = File.split(filename)[-1]
@@ -40,6 +42,24 @@ module Rulers
         FileModel.new "db/quotes/#{id}.json"
       end
 
+      def self.save(model)
+        id = model.id
+        hash = {}
+        hash["submitter"] = model["submitter"] || ""
+        hash ["quote"] = model["quote"] || ""
+        hash["attribution"] = model["attribution"] || ""
+
+        File.open("db/quotes/#{model.id}.json", "w") do |f|
+          f.write <<-TEMPLATE
+            {
+              "submitter": "#{hash ["submitter"]}",
+              "quote": "#{hash["quote"]}",
+              "attribution": "#{hash["attribution"]}"
+            }
+          TEMPLATE
+        end
+      end
+
       def self.update(attrs)
         return false if self.find(attrs["id"]).nil?
         if ENV["REQUEST_METHOD"] == "POST"
@@ -74,6 +94,16 @@ module Rulers
           return nil
         end
       end
+
+      def self.find_all_by_submitter(submitter_id)
+        files = Dir["db/quotes?*.json"]
+        files.each do |file|
+          if file { "submitter" == submitter_id }
+            file.map { |f| FileModel.new f }
+          end
+        end
+      end
+
     end
   end
 end
