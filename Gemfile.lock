@@ -1,10 +1,11 @@
 PATH
   remote: .
   specs:
-    rulers (0.0.4)
+    rulers (0.0.5)
       erubis
       multi_json
       rack
+      sqlite3
 
 GEM
   remote: https://rubygems.org/
@@ -15,6 +16,7 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.1.1)
+    sqlite3 (1.3.8)
 
 PLATFORMS
   ruby
